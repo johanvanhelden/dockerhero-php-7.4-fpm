@@ -28,7 +28,8 @@ RUN apt-get update && apt-get install -y \
     git \
     libssh2-1-dev \
     libzip-dev \
-    locales-all
+    locales-all \
+    libonig-dev
 
 # Install the Oracle client
 RUN mkdir /opt/oracle \
@@ -51,12 +52,11 @@ RUN docker-php-ext-install -j$(nproc) curl \
     && docker-php-ext-install -j$(nproc) exif \
     && docker-php-ext-install -j$(nproc) mbstring \
     && docker-php-ext-install -j$(nproc) iconv \
-    && docker-php-ext-install -j$(nproc) interbase \
     && docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-install -j$(nproc) soap \
     && docker-php-ext-install -j$(nproc) xmlrpc \
     && docker-php-ext-install -j$(nproc) xsl \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install imap \
