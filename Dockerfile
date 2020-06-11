@@ -29,7 +29,10 @@ RUN apt-get update && apt-get install -y \
     libssh2-1-dev \
     libzip-dev \
     locales-all \
-    libonig-dev
+    libonig-dev \
+    libmagickwand-dev
+
+RUN printf "\n" | pecl install imagick
 
 # Install the Oracle client
 RUN mkdir /opt/oracle \
@@ -63,6 +66,7 @@ RUN docker-php-ext-install -j$(nproc) curl \
     && docker-php-ext-install mysqli pdo pdo_mysql \
     && docker-php-ext-install zip \
     && docker-php-ext-enable oci8 \
+    && docker-php-ext-enable imagick \
     && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_19_5,19.5 \
     && docker-php-ext-install pdo_oci
 
