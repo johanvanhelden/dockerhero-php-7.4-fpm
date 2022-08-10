@@ -30,7 +30,9 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     locales-all \
     libonig-dev \
-    libmagickwand-dev
+    libmagickwand-dev \
+    libaio1 \
+    wkhtmltopdf
 
 RUN printf "\n" | pecl install imagick
 
@@ -48,7 +50,7 @@ RUN ln -s /opt/oracle/instantclient_19_5/libclntshcore.so.19.1 /opt/oracle/insta
 
 ENV LD_LIBRARY_PATH  /opt/oracle/instantclient_19_5:${LD_LIBRARY_PATH}
 
-RUN echo 'instantclient,/opt/oracle/instantclient_19_5/' | pecl install oci8
+RUN echo 'instantclient,/opt/oracle/instantclient_19_5/' | pecl install oci8-2.2.0
 
 RUN docker-php-ext-install -j$(nproc) curl \
     && docker-php-ext-install -j$(nproc) bcmath \
@@ -76,7 +78,7 @@ RUN \
     &&  echo "extension=redis.so" > /usr/local/etc/php/conf.d/ext-redis.ini
 
 # ssh2 module
-RUN cd /tmp && git clone https://git.php.net/repository/pecl/networking/ssh2.git && cd /tmp/ssh2 \
+RUN cd /tmp && git clone https://github.com/php/pecl-networking-ssh2.git ssh2 && cd /tmp/ssh2 \
     && phpize && ./configure && make && make install \
     && echo "extension=ssh2.so" > /usr/local/etc/php/conf.d/ext-ssh2.ini \
     && rm -rf /tmp/ssh2
